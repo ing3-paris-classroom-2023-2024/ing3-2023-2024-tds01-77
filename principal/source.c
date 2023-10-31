@@ -1,5 +1,11 @@
 #include "header.h"
 
 int main(){
-    printf("wee c tom");
+    char a;
+    int i;
+    for (i=0 ; i<257 ; i++){
+        a++;
+        printf("%d %c\n",i,i);
+    }
+
 }
