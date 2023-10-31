@@ -1,5 +1,5 @@
 #include "header.h"
 
 int main(){
-    printf("yooaaaoaao");
+    printf("wee c tom");
 }
