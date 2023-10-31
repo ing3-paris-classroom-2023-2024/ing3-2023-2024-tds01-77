@@ -1,11 +1,17 @@
 #include "header.h"
+#include <windows.h>
 
-int main(){
-    char a;
-    int i;
-    for (i=0 ; i<257 ; i++){
-        a++;
-        printf("%d %c\n",i,i);
-    }
+///fonction pour le deplacement du curseur
+void gotoligcol( int lig, int col ) {
+    COORD mycoord;
+    mycoord.X = col;
+    mycoord.Y = lig;
+    SetConsoleCursorPosition( GetStdHandle( STD_OUTPUT_HANDLE ), mycoord ); }
 
+
+int main () {
+    printf("blablaba\nBAHDUIADGYIAUDG\nBDADBADYUDAB");
+    gotoligcol(2,5);
+    printf("%c",2);
+    return 0;
 }
