@@ -14,7 +14,7 @@ void longueur(char *lvl, int *adrlignes, int *adrcolonnes){
     int colonnes = 0;
     FILE *fp = fopen(lvl, "r");
     if (fp == NULL) {
-        printf("Erreur lors de l'ouverture du fichier");
+        printf("Erreur lors de l'ouverture du fichier.");
     }
 
     char ch;
