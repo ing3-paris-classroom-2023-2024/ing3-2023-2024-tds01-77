@@ -75,14 +75,16 @@ int main() {
 
     int lignes, colonnes;
     char destination;
-    char *niveau = "niveaux/niveau1.txt";
+    char *niveau = "niveaux/niveau2.txt";
     int blocs[] = {169,207,245,124,196,219,178,254,174,175};
 
     longueur(niveau,&lignes, &colonnes);
     char tableau[lignes][colonnes];
 
     import(niveau, &lignes, &colonnes, tableau);
-    int snoopyXY[2]={2,2};
+    gotoligcol(13,10);
+    printf("%d",colonnes);
+    int snoopyXY[2]={1,1};
     int move[2];
     move[0]=snoopyXY[0];
     move[1]=snoopyXY[1];
