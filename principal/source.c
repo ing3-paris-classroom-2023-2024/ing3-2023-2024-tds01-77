@@ -1,5 +1,6 @@
 #include "header.h"
 
+
 void gotoligcol( int lig, int col )
 {
     COORD mycoord;
@@ -33,7 +34,6 @@ void longueur(char *lvl, int *adrlignes, int *adrcolonnes){
 
 
 void import(char *lvl, int *lignes, int *colonnes, char tableau[*lignes][*colonnes]){
-    gotoligcol(0,0);
     int i, j;
     i=0;
     j=0;
@@ -67,29 +67,55 @@ void impression(){
 
 
 int main() {
+    unsigned encoding = GetConsoleOutputCP();
+    SetConsoleOutputCP(encoding);
+
     int lignes, colonnes;
+    int snoopy[2]={1,1};
+    int move[2] = {1,1};
     char *niveau = "niveaux/niveau1.txt";
+    char blocs[] = {};
     longueur(niveau,&lignes, &colonnes);
 
     char tableau[lignes][colonnes];
 
     import(niveau, &lignes, &colonnes, tableau);
 
-    for (int i=0; i<lignes; i++){
-        for (int j=0; j<colonnes; j++){
-            printf("%c",tableau[i][j]);
+    char entree;
+
+    while (entree != 'x'){
+
+        switch(entree){
+            case 'z':
+                move[1]+=1;
+                break;
+            case 'q':
+                move[0]+=(-1);
+                break;
+            case 's':
+                move[1]+=(-1);
+                break;
+            case 'd':
+                move[0]+=1;
+                break;
         }
+
+        gotoligcol(0,0);
+        for (int i=0; i<lignes; i++){
+            for (int j=0; j<colonnes; j++){
+                printf("%c",tableau[i][j]);
+                if (i==snoopy[0] && j==snoopy[1]){
+                    putchar(169);
+                }
+            }
+            printf("\n");
+        }
+
         printf("\n");
+        entree = getch();
     }
-    printf("\n");
 
 
-/*
- *  char te = getchar();
-    printf("%c",te);
-    getch() pour pas besoin de touche entree
-    system("clear");
- */
     printf("appuyez sur n'importe quoi pour fermer la console...");
     getch();
     return 0;

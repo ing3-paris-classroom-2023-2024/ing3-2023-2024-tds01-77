@@ -1,9 +1,9 @@
-2 : snoopy
-6 : balle
-207 : oiseau
-24-27 : bloc deplacable auto
+169 : snoopy
+207 : balle
+245 : oiseau
+124 et 196 : bloc deplacable auto
 219 : bloc
 178 : bloc cassable
 254 : bloc poussable
-15 : bloc piege
-11-12 : bloc teleportation
+178 : bloc piege
+174-175 : bloc teleportation
