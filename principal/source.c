@@ -75,7 +75,9 @@ int main() {
 
     int lignes, colonnes;
     char destination;
-    char *niveau = "niveaux/niveau2.txt";
+    char *niveau = "niveaux/niveau3.txt";
+
+
     int blocs[] = {169,207,245,124,196,219,178,254,174,175};
 
     longueur(niveau,&lignes, &colonnes);
