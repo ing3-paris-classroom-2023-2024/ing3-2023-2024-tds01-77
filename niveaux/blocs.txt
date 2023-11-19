@@ -7,5 +7,5 @@ bloc :              Û
 bloc cassable :     ²
 bloc poussable :    þ
 bloc piege :        ²
-bloc tp :           ®
-bloc tp :           ¯
+bloc tp in:         ®
+bloc tp out:        ¯
