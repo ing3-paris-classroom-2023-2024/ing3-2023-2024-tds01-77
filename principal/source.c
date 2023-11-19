@@ -58,17 +58,19 @@ void import(char *lvl, int *lignes, int *colonnes, char tableau[*lignes][*colonn
 }
 
 
-void renvoi_sp(int bloc){
+void renvoi_sp(int bloc, int snoopyXY[2], int move[2], int *lignes, int *colonnes, char tableau[*lignes][*colonnes]){
     switch (bloc){
         case 245:
             gotoligcol(20,5);
+            snoopyXY[0] = move[0];
+            snoopyXY[1] = move[1];
+            tableau[move[0]][move[1]]=' ';
             printf("bird catched");
     }
 }
 
 
 int main() {
-    unsigned encoding = GetConsoleOutputCP();
     SetConsoleCP(CP_WINANSI);
     SetConsoleOutputCP(CP_WINANSI);
 
@@ -114,7 +116,7 @@ int main() {
         destination = tableau[move[0]][move[1]] + 256;
         for (int i=0 ; i<sizeof(blocs) ; i++){
             if (destination == blocs[i]){
-                renvoi_sp(blocs[i]);
+                renvoi_sp(blocs[i], snoopyXY, move, &lignes, &colonnes, tableau);
             }
             else {
                 snoopyXY[0]=move[0];
