@@ -75,10 +75,19 @@ int main() {
 
     int lignes, colonnes;
     char destination;
-    char *niveau = "niveaux/niveau3.txt";
+    char *niveau = "niveaux/niveau1.txt";
 
+    int blocs[] = {169,207,245,124,196,219,178,254,178, 174,175};
 
-    int blocs[] = {169,207,245,124,196,219,178,254,174,175};
+    gotoligcol(20,20);
+
+    FILE *f = fopen("niveaux/blocs.txt", "w+");
+    for (int i=0 ; i<13 ; i++){
+        fputc(blocs[i],f);
+        fputc('\n',f);
+    }
+
+    fclose(f);
 
     longueur(niveau,&lignes, &colonnes);
     char tableau[lignes][colonnes];
