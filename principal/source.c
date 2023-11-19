@@ -71,30 +71,25 @@ void renvoi_sp(int bloc){
 
 int main() {
     unsigned encoding = GetConsoleOutputCP();
-    SetConsoleOutputCP(encoding);
+    SetConsoleCP(CP_WINANSI);
+    SetConsoleOutputCP(CP_WINANSI);
 
     int lignes, colonnes;
     char destination;
-    char *niveau = "niveaux/niveau1.txt";
+    char *niveau = "niveaux/blocs.txt";
 
+    gotoligcol(12,10);
     int blocs[] = {169,207,245,124,196,219,178,254,178, 174,175};
-
-    gotoligcol(20,20);
-
-    FILE *f = fopen("niveaux/blocs.txt", "w+");
-    for (int i=0 ; i<13 ; i++){
-        fputc(blocs[i],f);
-        fputc('\n',f);
+    for (int i=0 ; i<11 ; i++){
+        printf("%c",blocs[i]);
     }
 
-    fclose(f);
+
 
     longueur(niveau,&lignes, &colonnes);
     char tableau[lignes][colonnes];
 
     import(niveau, &lignes, &colonnes, tableau);
-    gotoligcol(13,10);
-    printf("%d",colonnes);
     int snoopyXY[2]={1,1};
     int move[2];
     move[0]=snoopyXY[0];
@@ -140,7 +135,7 @@ int main() {
                     putchar(169);
                 }
                 else {
-                    printf("%c",tableau[i][j]);
+                    putchar(tableau[i][j]);
                 }
             }
             printf("\n");
