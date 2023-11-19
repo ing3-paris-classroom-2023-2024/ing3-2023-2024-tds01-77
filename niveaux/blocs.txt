@@ -1,0 +1,11 @@
+snoopy :            ©
+balle :             Ï
+oiseau :            õ
+bloc deplacabe :    |
+bloc deplacable :   Ä
+bloc :              Û
+bloc cassable :     ²
+bloc poussable :    þ
+bloc piege :        ²
+bloc tp in:         ®
+bloc tp out:        ¯
