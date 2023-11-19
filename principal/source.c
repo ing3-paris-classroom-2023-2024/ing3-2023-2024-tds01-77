@@ -1,5 +1,5 @@
 #include "header.h"
-
+#include <windows.h>
 
 void gotoligcol( int lig, int col )
 {
