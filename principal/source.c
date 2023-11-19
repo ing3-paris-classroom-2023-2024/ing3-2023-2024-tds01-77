@@ -1,5 +1,4 @@
 #include "header.h"
-#include <windows.h>
 
 void gotoligcol( int lig, int col )
 {
@@ -77,18 +76,18 @@ int main() {
     int lignes, colonnes;
     int destination;
     char *niveau = "niveaux/niveautest.txt";
-
-    int blocs[] = {169,207,245,124,196,219,178,254,178, 174,175};
-
+    int blocs[] = {169,207,245,124,196,219,178,254,178, 174,175, 'f'};
 
     longueur(niveau,&lignes, &colonnes);
     char tableau[lignes][colonnes];
 
     import(niveau, &lignes, &colonnes, tableau);
+
     int snoopyXY[2]={1,1};
     int move[2];
     move[0]=snoopyXY[0];
     move[1]=snoopyXY[1];
+    bool rencontre;
 
     char entree;
 
@@ -114,16 +113,19 @@ int main() {
 
 
         destination = tableau[move[0]][move[1]] + 256;
-        for (int i=0 ; i<sizeof(blocs) ; i++){
+        rencontre = false;
+        for (int i=0 ; blocs[i]!= 'f' ; i++){
             if (destination == blocs[i]){
+                rencontre = true;
                 renvoi_sp(blocs[i], snoopyXY, move, &lignes, &colonnes, tableau);
-            }
-            else {
-                snoopyXY[0]=move[0];
-                snoopyXY[1]=move[1];
+                move[0]=snoopyXY[0];
+                move[1]=snoopyXY[1];
             }
         }
-
+        if (!rencontre){
+            snoopyXY[0]=move[0];
+            snoopyXY[1]=move[1];
+        }
 
 
         gotoligcol(0,0);
