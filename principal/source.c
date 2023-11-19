@@ -39,14 +39,12 @@ void import(char *lvl, int *lignes, int *colonnes, char tableau[*lignes][*colonn
     j=0;
     longueur(lvl, lignes, colonnes);
 
-    char tab[*lignes][*colonnes];
     char *niveau = lvl;
     FILE *fp = fopen(niveau, "r");
 
     char ch;
     while ((ch = fgetc(fp)) != EOF) {
         if (ch!=10){
-            tab[j][i]=ch;
             tableau[j][i]=ch;
             i++;
         }
@@ -62,8 +60,8 @@ void import(char *lvl, int *lignes, int *colonnes, char tableau[*lignes][*colonn
 
 void renvoi_sp(int bloc){
     switch (bloc){
-        case 124:
-            gotoligcol(15,5);
+        case 245:
+            gotoligcol(20,5);
             printf("bird catched");
     }
 }
@@ -75,15 +73,10 @@ int main() {
     SetConsoleOutputCP(CP_WINANSI);
 
     int lignes, colonnes;
-    char destination;
-    char *niveau = "niveaux/blocs.txt";
+    int destination;
+    char *niveau = "niveaux/niveau4.txt";
 
-    gotoligcol(12,10);
     int blocs[] = {169,207,245,124,196,219,178,254,178, 174,175};
-    for (int i=0 ; i<11 ; i++){
-        printf("%c",blocs[i]);
-    }
-
 
 
     longueur(niveau,&lignes, &colonnes);
@@ -97,7 +90,7 @@ int main() {
 
     char entree;
 
-    gotoligcol(10,10);
+    gotoligcol(15,5);
     printf("x pour arreter");
 
     while (entree != 'x'){
@@ -118,15 +111,18 @@ int main() {
         }
 
 
-        destination = tableau[move[0]][move[1]];
+        destination = tableau[move[0]][move[1]] + 256;
         for (int i=0 ; i<sizeof(blocs) ; i++){
             if (destination == blocs[i]){
                 renvoi_sp(blocs[i]);
             }
+            else {
+                snoopyXY[0]=move[0];
+                snoopyXY[1]=move[1];
+            }
         }
 
-        snoopyXY[0]=move[0];
-        snoopyXY[1]=move[1];
+
 
         gotoligcol(0,0);
         for (int i=0; i<lignes; i++){
