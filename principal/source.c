@@ -114,7 +114,7 @@ int main() {
 
         destination = tableau[move[0]][move[1]] + 256;
         rencontre = false;
-        for (int i=0 ; blocs[i]!= 'f' ; i++){
+        for (int i=0 ; blocs[i] != 'f' ; i++){
             if (destination == blocs[i]){
                 rencontre = true;
                 renvoi_sp(blocs[i], snoopyXY, move, &lignes, &colonnes, tableau);
