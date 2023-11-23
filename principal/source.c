@@ -56,13 +56,40 @@ void import(char *lvl, int *lignes, int *colonnes, char tableau[*lignes][*colonn
     fclose(fp);
 }
 
+void regles(){
+    system("cls");
+
+    FILE *f =fopen("niveaux/regles.txt","r");
+    char ch;
+    while ((ch = fgetc(f)) != EOF) {
+        printf("%c",ch);
+    }
+    fclose(f);
+
+    char input = getch();
+    if (input == 27){
+        menu();
+    }
+}
+
 void menu(){
+    system("cls");
+
     FILE *fmenu =fopen("niveaux/menu.txt","r");
     char ch;
     while ((ch = fgetc(fmenu)) != EOF) {
         printf("%c",ch);
     }
     fclose(fmenu);
+
+    char input = getch();
+
+    switch (input){
+        case '&':
+            regles();
+            break;
+
+    }
 }
 
 
@@ -114,7 +141,7 @@ int main() {
 ///pour cacher les curseur
 
     menu();
-    getch();
+    system("cls");
     int lignes, colonnes;
     int destination;        ///code ascii du bloc rencontré
     char *niveau = "niveaux/niveau1.txt";
