@@ -56,6 +56,15 @@ void import(char *lvl, int *lignes, int *colonnes, char tableau[*lignes][*colonn
     fclose(fp);
 }
 
+void menu(){
+    FILE *fmenu =fopen("niveaux/menu.txt","r");
+    char ch;
+    while ((ch = fgetc(fmenu)) != EOF) {
+        printf("%c",ch);
+    }
+    fclose(fmenu);
+}
+
 
 void renvoi_sp(int bloc, int snoopyXY[2], int move[2], int *lignes, int *colonnes, char tableau[*lignes][*colonnes]){   ///exécute le script corresondant au bloc rencontré
     switch (bloc){
@@ -104,11 +113,8 @@ int main() {
     SetConsoleCursorInfo(consoleHandle, &info);
 ///pour cacher les curseur
 
-
-    FILE *fmenu =fopen("niveaux/menu.txt","r");
-    fclose(fmenu);
-
-
+    menu();
+    getch();
     int lignes, colonnes;
     int destination;        ///code ascii du bloc rencontré
     char *niveau = "niveaux/niveau1.txt";
