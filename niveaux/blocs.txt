@@ -1,11 +1,21 @@
-snoopy :            ©
-balle :             Ï
-oiseau :            õ
-bloc deplacabe :    |
-bloc deplacable :   Ä
-bloc :              Û
-bloc cassable :     ²
-bloc poussable :    þ
-bloc piege :        ²
-bloc tp in:         ®
-bloc tp out:        ¯
+169  ©  snoopy
+207  Ï  balle
+245  õ  oiseau
+124  |  bloc deplacable
+196  Ä  bloc deplacable
+219  Û  bloc
+254  þ  bloc poussable
+178  ²  bloc piege
+174  ®  bloc tp in
+175  ¯  bloc tp out
+185  ¹  ?
+186  º  ?
+187  »  ?
+188  ¼  ?
+200  È  ?
+201  É  ?
+202  Ê  ?
+203  Ë  ?
+204  Ì  ?
+205  Í  ?
+206  Î  ?

@@ -59,12 +59,35 @@ void import(char *lvl, int *lignes, int *colonnes, char tableau[*lignes][*colonn
 
 void renvoi_sp(int bloc, int snoopyXY[2], int move[2], int *lignes, int *colonnes, char tableau[*lignes][*colonnes]){
     switch (bloc){
-        case 245:
+        case 245:    ///oiseau
             gotoligcol(20,5);
             snoopyXY[0] = move[0];
             snoopyXY[1] = move[1];
             tableau[move[0]][move[1]]=' ';
             printf("bird catched");
+            break;
+
+        case 175:    ///teleportation
+            for (int i=0 ; i<*lignes ; i++){
+                for (int j=0 ; j<*colonnes ; j++){
+                    if (tableau[i][j] == -82){
+                        snoopyXY[0]=i;
+                        snoopyXY[1]=j-1;
+                    }
+                }
+            }
+            break;
+
+        case 174:    ///teleportation
+            for (int k=0 ; k<*lignes ; k++){
+                for (int l=0 ; l<*colonnes ; l++){
+                    if (tableau[k][l] == -81){
+                        snoopyXY[0]=k;
+                        snoopyXY[1]=l+1;
+                    }
+                }
+            }
+            break;
     }
 }
 
@@ -73,10 +96,18 @@ int main() {
     SetConsoleCP(CP_WINANSI);
     SetConsoleOutputCP(CP_WINANSI);
 
+///pour cacher le curseur
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO info;
+    info.dwSize = 100;
+    info.bVisible = FALSE;
+    SetConsoleCursorInfo(consoleHandle, &info);
+
+
     int lignes, colonnes;
     int destination;
-    char *niveau = "niveaux/niveautest.txt";
-    int blocs[] = {169,207,245,124,196,219,178,254,178, 174,175, 'f'};
+    char *niveau = "niveaux/niveau1.txt";
+    int blocs[] = {169,207,245,124,196,219,178,254, 174,175,185,186,187,188,200,201,202,203,204,205,206,'f'};
 
     longueur(niveau,&lignes, &colonnes);
     char tableau[lignes][colonnes];
