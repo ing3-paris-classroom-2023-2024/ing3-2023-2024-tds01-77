@@ -1,6 +1,6 @@
 #include "header.h"
 
-void gotoligcol( int lig, int col )
+void gotoligcol( int lig, int col )   ///sous prog pour placer le curseur où on veut
 {
     COORD mycoord;
     mycoord.X = col;
@@ -9,7 +9,7 @@ void gotoligcol( int lig, int col )
 }
 
 
-void longueur(char *lvl, int *adrlignes, int *adrcolonnes){
+void longueur(char *lvl, int *adrlignes, int *adrcolonnes){     ///obtient le nb de colonnes et de lignes d'un fichier
     int lignes = 1;
     int colonnes = 0;
     FILE *fp = fopen(lvl, "r");
@@ -32,7 +32,7 @@ void longueur(char *lvl, int *adrlignes, int *adrcolonnes){
 }
 
 
-void import(char *lvl, int *lignes, int *colonnes, char tableau[*lignes][*colonnes]){
+void import(char *lvl, int *lignes, int *colonnes, char tableau[*lignes][*colonnes]){   ///import du fichier et insertion des caractères dans un tableau
     int i, j;
     i=0;
     j=0;
@@ -57,7 +57,7 @@ void import(char *lvl, int *lignes, int *colonnes, char tableau[*lignes][*colonn
 }
 
 
-void renvoi_sp(int bloc, int snoopyXY[2], int move[2], int *lignes, int *colonnes, char tableau[*lignes][*colonnes]){
+void renvoi_sp(int bloc, int snoopyXY[2], int move[2], int *lignes, int *colonnes, char tableau[*lignes][*colonnes]){   ///exécute le script corresondant au bloc rencontré
     switch (bloc){
         case 245:    ///oiseau
             gotoligcol(20,5);
@@ -93,8 +93,8 @@ void renvoi_sp(int bloc, int snoopyXY[2], int move[2], int *lignes, int *colonne
 
 
 int main() {
-    SetConsoleCP(CP_WINANSI);
-    SetConsoleOutputCP(CP_WINANSI);
+    SetConsoleCP(CP_WINANSI);       ///définir l'encodage du projet
+    SetConsoleOutputCP(CP_WINANSI); ///définir l'encodage de la console
 
 ///pour cacher le curseur
     HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -102,32 +102,39 @@ int main() {
     info.dwSize = 100;
     info.bVisible = FALSE;
     SetConsoleCursorInfo(consoleHandle, &info);
+///pour cacher les curseur
+
+
+    FILE *fmenu =fopen("niveaux/menu.txt","r");
+    fclose(fmenu);
 
 
     int lignes, colonnes;
-    int destination;
+    int destination;        ///code ascii du bloc rencontré
     char *niveau = "niveaux/niveau1.txt";
+
+    ///liste des codes ascii des blocs
     int blocs[] = {169,207,245,124,196,219,178,254, 174,175,185,186,187,188,200,201,202,203,204,205,206,'f'};
 
-    longueur(niveau,&lignes, &colonnes);
-    char tableau[lignes][colonnes];
+    longueur(niveau,&lignes, &colonnes);    ///appel de longueur
+    char tableau[lignes][colonnes];     ///définition du tableau en fonction des données fournies par longueur
 
-    import(niveau, &lignes, &colonnes, tableau);
+    import(niveau, &lignes, &colonnes, tableau);    ///place le fichier à ouvrir dans tableau
 
-    int snoopyXY[2]={1,1};
-    int move[2];
+    int snoopyXY[2]={1,1};      ///coordonnées de snoopy
+    int move[2];                        ///coordonnées de snoopy après déplacement
     move[0]=snoopyXY[0];
     move[1]=snoopyXY[1];
-    bool rencontre;
+    bool rencontre;                     ///true si bloc rencontré au mouvement initialisé
 
-    char entree;
+    char entree;                        ///touche d'entrée utilisateur
 
     gotoligcol(15,5);
     printf("x pour arreter");
 
     while (entree != 'x'){
 
-        switch(entree){
+        switch(entree){                 ///vérifie si z,q,s ou d est entré par l'utilisateur
             case 'z':
                 move[0]+=(-1);
                 break;
@@ -143,29 +150,29 @@ int main() {
         }
 
 
-        destination = tableau[move[0]][move[1]] + 256;
+        destination = tableau[move[0]][move[1]] + 256;      ///place dans destination le code ascii du prochain caractère rencontré
         rencontre = false;
         for (int i=0 ; blocs[i] != 'f' ; i++){
-            if (destination == blocs[i]){
+            if (destination == blocs[i]){   ///si un bloc spécial est rencontré
                 rencontre = true;
                 renvoi_sp(blocs[i], snoopyXY, move, &lignes, &colonnes, tableau);
                 move[0]=snoopyXY[0];
                 move[1]=snoopyXY[1];
             }
         }
-        if (!rencontre){
+        if (!rencontre){        ///si aucun bloc spécial n'est rencontré, snoopy bouge en prenant les coordonnées du mouvement demandé
             snoopyXY[0]=move[0];
             snoopyXY[1]=move[1];
         }
 
 
-        gotoligcol(0,0);
+        gotoligcol(0,0);        ///imprime le tableau
         for (int i=0; i<lignes; i++){
             for (int j=0; j<colonnes; j++){
-                if (i==snoopyXY[0] && j==snoopyXY[1]){
+                if (i==snoopyXY[0] && j==snoopyXY[1]){      ///aux coordonnées de snoopy, imprime snoopy
                     putchar(169);
                 }
-                else {
+                else {                                      ///sinon, imprime le bloc prévu dans le fichier (attention aux conflits)
                     putchar(tableau[i][j]);
                 }
             }
@@ -173,7 +180,7 @@ int main() {
         }
 
         printf("\n");
-        entree = getch();
+        entree = getch();           ///attends l'entrée utilisateur
     }
 
 
