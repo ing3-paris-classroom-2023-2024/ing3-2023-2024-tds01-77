@@ -6,6 +6,6 @@
 
 ллллллллллллллллллллллллллллллллллллллллллл
 
-1.regles	2.nouvelle partie	
-3.charger	4.mot de passe	
-5.Scores	6.quitter
+Regles	    Nouvelle partie
+Charger	    Mot de passe
+Scores	    Quitter

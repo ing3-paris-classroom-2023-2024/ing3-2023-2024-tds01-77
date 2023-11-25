@@ -32,7 +32,7 @@ void longueur(char *lvl, int *adrlignes, int *adrcolonnes){     ///obtient le nb
 }
 
 
-void import(char *lvl, int *lignes, int *colonnes, char tableau[*lignes][*colonnes]){   ///import du fichier et insertion des caractères dans un tableau
+void import(char *lvl, int *lignes, int *colonnes, char tableau[*lignes][*colonnes], int snoopyXY[2], int *oiseaux){   ///import du fichier et insertion des caractères dans un tableau
     int i, j;
     i=0;
     j=0;
@@ -42,6 +42,10 @@ void import(char *lvl, int *lignes, int *colonnes, char tableau[*lignes][*colonn
     FILE *fp = fopen(niveau, "r");
 
     char ch;
+    snoopyXY[0] = fgetc(fp) - 64;
+    snoopyXY[1] = fgetc(fp) - 64;
+    *oiseaux = fgetc(fp) - 64;
+
     while ((ch = fgetc(fp)) != EOF) {
         if (ch!=10){
             tableau[j][i]=ch;
@@ -66,30 +70,18 @@ void regles(){
     }
     fclose(f);
 
-    char input = getch();
-    if (input == 27){
-        menu();
-    }
+    getch();
 }
 
 void menu(){
     system("cls");
 
-    FILE *fmenu =fopen("niveaux/menu.txt","r");
+    FILE *fmenu = fopen("niveaux/menu.txt","r");
     char ch;
     while ((ch = fgetc(fmenu)) != EOF) {
         printf("%c",ch);
     }
     fclose(fmenu);
-
-    char input = getch();
-
-    switch (input){
-        case '&':
-            regles();
-            break;
-
-    }
 }
 
 
@@ -128,58 +120,74 @@ void renvoi_sp(int bloc, int snoopyXY[2], int move[2], int *lignes, int *colonne
 }
 
 
-int main() {
-    SetConsoleCP(CP_WINANSI);       ///définir l'encodage du projet
-    SetConsoleOutputCP(CP_WINANSI); ///définir l'encodage de la console
+void save(int *lignes, int *colonnes, char tableau1[*lignes][*colonnes], int snoopyXY1[2]){
+    FILE *fichier = fopen("niveaux/sauvegarde.txt", "w");
 
-///pour cacher le curseur
-    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_CURSOR_INFO info;
-    info.dwSize = 100;
-    info.bVisible = FALSE;
-    SetConsoleCursorInfo(consoleHandle, &info);
-///pour cacher les curseur
+    fputc(snoopyXY1[0]+64,fichier);
+    fputc(snoopyXY1[1]+64,fichier);
+    for (int i=0 ; i<*lignes ; i++){
+        for (int j=0 ; j<*colonnes ; j++){
+            fputc(tableau1[i][j],fichier);
+        }
+        if (i<*lignes-1){
+            fputc('\n',fichier);
+        }
+    }
+}
 
-    menu();
+
+void jeu(int lvl){
     system("cls");
-    int lignes, colonnes;
-    int destination;        ///code ascii du bloc rencontré
-    char *niveau = "niveaux/niveau1.txt";
 
+    char *ListeNiveaux[] = {"niveaux/sauvegarde.txt","niveaux/niveau1.txt", "niveaux/niveautest.txt"};
+    int lignes, colonnes;
+    char *niveau = ListeNiveaux[lvl];
+
+    int destination;        ///code ascii du bloc rencontré
     ///liste des codes ascii des blocs
     int blocs[] = {169,207,245,124,196,219,178,254, 174,175,185,186,187,188,200,201,202,203,204,205,206,'f'};
 
     longueur(niveau,&lignes, &colonnes);    ///appel de longueur
     char tableau[lignes][colonnes];     ///définition du tableau en fonction des données fournies par longueur
-
-    import(niveau, &lignes, &colonnes, tableau);    ///place le fichier à ouvrir dans tableau
-
     int snoopyXY[2]={1,1};      ///coordonnées de snoopy
     int move[2];                        ///coordonnées de snoopy après déplacement
+    int oiseaux=0;
+
+
+    import(niveau, &lignes, &colonnes, tableau, snoopyXY, &oiseaux);    ///place le fichier à ouvrir dans tableau
+
     move[0]=snoopyXY[0];
     move[1]=snoopyXY[1];
+
+
     bool rencontre;                     ///true si bloc rencontré au mouvement initialisé
 
     char entree;                        ///touche d'entrée utilisateur
 
-    gotoligcol(15,5);
-    printf("x pour arreter");
+    gotoligcol(19,5);
+    printf("q pour arreter");
 
-    while (entree != 'x'){
+    while (entree != 'q'){
+        gotoligcol(0,5);
+        printf("%d oiseaux",oiseaux);
 
         switch(entree){                 ///vérifie si z,q,s ou d est entré par l'utilisateur
-            case 'z':
+            case 72:
                 move[0]+=(-1);
                 break;
-            case 'q':
+            case 75:
                 move[1]+=(-1);
                 break;
-            case 's':
+            case 80:
                 move[0]+=1;
                 break;
-            case 'd':
+            case 77:
                 move[1]+=1;
                 break;
+            case 's':
+                save(&lignes, &colonnes, tableau,snoopyXY);
+                break;
+
         }
 
 
@@ -199,7 +207,7 @@ int main() {
         }
 
 
-        gotoligcol(0,0);        ///imprime le tableau
+        gotoligcol(2,0);        ///imprime le tableau
         for (int i=0; i<lignes; i++){
             for (int j=0; j<colonnes; j++){
                 if (i==snoopyXY[0] && j==snoopyXY[1]){      ///aux coordonnées de snoopy, imprime snoopy
@@ -215,6 +223,52 @@ int main() {
         printf("\n");
         entree = getch();           ///attends l'entrée utilisateur
     }
+}
+
+
+
+int main() {
+    SetConsoleCP(CP_WINANSI);       ///définir l'encodage du projet
+    SetConsoleOutputCP(CP_WINANSI); ///définir l'encodage de la console
+
+///pour cacher le curseur
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO info;
+    info.dwSize = 100;
+    info.bVisible = FALSE;
+    SetConsoleCursorInfo(consoleHandle, &info);
+///pour cacher les curseur
+
+
+    system("cls");
+
+
+    menu();
+
+    char input;
+    while (input!='q'){
+        input = getch();
+        switch (input){
+            case 'r':
+                regles();
+                menu();
+                break;
+            case 'n':
+                jeu(1);
+                menu();
+                break;
+            case 'c':
+                jeu(0);
+                menu();
+                break;
+
+        }
+    }
+
+
+
+
+    system("cls");
 
 
     printf("appuyez sur n'importe quoi pour fermer la console...");
