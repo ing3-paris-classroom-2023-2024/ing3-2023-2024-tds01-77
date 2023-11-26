@@ -32,7 +32,7 @@ void longueur(char *lvl, int *adrlignes, int *adrcolonnes){     ///obtient le nb
 }
 
 
-void import(char *lvlname, int *lignes, int *colonnes, char tableau[*lignes][*colonnes], int snoopyXY[2], int oiseaux[2], int *lvl, int *vies){   ///import du fichier et insertion des caractères dans un tableau
+void import(char *lvlname, int *lignes, int *colonnes, char tableau[*lignes][*colonnes], int snoopyXY[2], int oiseaux[2], int *lvl, int *vies, double *pause){   ///import du fichier et insertion des caractères dans un tableau
     int i, j;
     i=0;
     j=0;
@@ -51,6 +51,9 @@ void import(char *lvlname, int *lignes, int *colonnes, char tableau[*lignes][*co
     snoopyXY[1] = fgetc(fp) - 65;
     oiseaux[0] = fgetc(fp) - 65;
     oiseaux[1] = fgetc(fp) - 65;
+    int nb = fgetc(fp) - 65;
+    *pause = nb - 120;
+
 
     while ((ch = fgetc(fp)) != EOF) {
         if (ch!=10){
@@ -109,12 +112,10 @@ void renvoi_sp(int bloc, int snoopyXY[2], int move[2], int *lignes, int *colonne
     int sens[2] = {move[0]-snoopyXY[0], move[1]-snoopyXY[1]};
     switch (bloc){
         case 245:    ///oiseau
-            gotoligcol(20,5);   ///place le curseur aux coordonnées données (20,5)
             snoopyXY[0] = move[0];      ///change les coordonnées de snoopy pour qu'ils prennent celles du déplacement demandé
             snoopyXY[1] = move[1];
             tableau[move[0]][move[1]]=' ';  ///remplace le caractère de l'oiseau par un espace dans le niveau
             oiseaux[0]+=1;                  ///ajoute 1 au compteur du score
-            printf("bird catched");
             break;
 
         case 175:    ///teleportation
@@ -169,7 +170,7 @@ void renvoi_sp(int bloc, int snoopyXY[2], int move[2], int *lignes, int *colonne
 }
 
 
-void save(int *lignes, int *colonnes, char tableau1[*lignes][*colonnes], int snoopyXY1[2], int oiseaux[2], int lvl, int vies){
+void save(int *lignes, int *colonnes, char tableau1[*lignes][*colonnes], int snoopyXY1[2], int oiseaux[2], int lvl, int vies, double temps){
     FILE *fichier = fopen("niveaux/sauvegarde.txt", "w");
 
     fputc(lvl+65,fichier);
@@ -178,6 +179,7 @@ void save(int *lignes, int *colonnes, char tableau1[*lignes][*colonnes], int sno
     fputc(snoopyXY1[1]+65,fichier);
     fputc(oiseaux[0]+65,fichier);
     fputc(oiseaux[1]+65,fichier);
+    fputc(temps+65, fichier);
     for (int i=0 ; i<*lignes ; i++){
         for (int j=0 ; j<*colonnes ; j++){
             fputc(tableau1[i][j],fichier);
@@ -185,6 +187,17 @@ void save(int *lignes, int *colonnes, char tableau1[*lignes][*colonnes], int sno
         if (i<*lignes-1){
             fputc('\n',fichier);
         }
+    }
+}
+
+
+void ecrire_score(char* nom, int score) {
+    FILE* fichier = fopen("niveaux/scores.txt", "a");                    /// Ouvre le fichier en mode append
+    if (fichier != NULL) {
+        fprintf(fichier, "%s a eu un score de %d\n", nom, score); /// Écrit la ligne dans le fichier
+        fclose(fichier);                                                   /// Ferme le fichier
+    } else {
+        printf("Erreur lors de l'ouverture du fichier.\n");              /// Affiche une erreur si le fichier n'a pas pu être ouvert
     }
 }
 
@@ -210,12 +223,14 @@ void jeu(int lvl){
     int balleTraj[2]={1,1};
     int tics=0;
     int vies = 3;
-    double temps = 1;
-    time_t Tdebut, Tactuel;
+    double temps = 120;
+    double pause = 0;
+    int score = 0;
+    time_t Tdebut, Tactuel, tampon1, tampon2;
     time(&Tdebut);
 
 
-    import(niveau, &lignes, &colonnes, tableau, snoopyXY, oiseaux, &lvl, &vies);    ///place le fichier à ouvrir dans tableau
+    import(niveau, &lignes, &colonnes, tableau, snoopyXY, oiseaux, &lvl, &vies, &pause);    ///place le fichier à ouvrir dans tableau
 
     move[0]=snoopyXY[0];
     move[1]=snoopyXY[1];
@@ -224,14 +239,14 @@ void jeu(int lvl){
 
     char entree;                        ///touche d'entrée utilisateur
 
-    gotoligcol(19,5);
-    printf("q pour arreter");
+    gotoligcol(12,3);
+    printf("q pour arreter\np pour pause\ns pour sauvegarder");
 
     while (entree != 'q'){
         gotoligcol(0,2);
-        printf("niveau %d sur %d,  %d oiseaux sur %d,  %d vies restantes\n  temps restant : %.0f",lvl, nb_niveaux, oiseaux[0], oiseaux[1], vies, temps);
+        printf("niveau %d sur %d,  %d oiseaux sur %d,  %d vies restantes\n  temps restant : %.0f     ",lvl, nb_niveaux, oiseaux[0], oiseaux[1], vies, temps);
 
-        if (vies==0){
+        if (vies==0 || temps <= 0){
             lose();
             break;
         }
@@ -259,13 +274,25 @@ void jeu(int lvl){
 
         if(oiseaux[0]==oiseaux[1]){
             system("cls");
-            printf("BRAVOOOOO, vous avez eu tous les oiseaux");
+            printf("BRAVOOOOO, vous avez eu tous les oiseaux\n");
             lvl++;
+            score += temps*100;
             if (lvl >= nb_niveaux){
-                printf("\n\n\nvous avez fini le jeu!!!");
-                getch();
-                getch();
+                FILE *fini =fopen("niveaux/fini.txt","r");
+                char ch;
+                while ((ch = fgetc(fini)) != EOF) {
+                    printf("%c",ch);
+                }
+                fclose(fini);
+                printf("\n\nvous avez fini le jeu avec un score de %d \nentrez votre nom pour sauvegarder le score :",score);
+                char pseudo[100];
+                scanf("%s",pseudo);
+                ecrire_score(pseudo,score);
+
                 return;
+            }
+            else {
+                printf("appuyez sur n'importe quelle touche pour passer au niveau suivantq\n");
             }
 
             if (lvl < nb_niveaux){
@@ -273,7 +300,7 @@ void jeu(int lvl){
                 getch();
                 system("cls");
 
-                import(ListeNiveaux[lvl], &lignes, &colonnes, tableau, snoopyXY, oiseaux, &lvl, &vies);
+                import(ListeNiveaux[lvl], &lignes, &colonnes, tableau, snoopyXY, oiseaux, &lvl, &vies, &pause);
                 move[0]=snoopyXY[0];
                 move[1]=snoopyXY[1];
             }
@@ -294,13 +321,13 @@ void jeu(int lvl){
                 move[1]+=1;
                 break;
             case 's':
-                save(&lignes, &colonnes, tableau, snoopyXY, oiseaux, lvl, vies);
+                save(&lignes, &colonnes, tableau, snoopyXY, oiseaux, lvl, vies, temps);
                 break;
             case 'p':
-                tampon = Tactuel;
+                time(&tampon1);
                 getch();
-                getch();
-                temps = tampon;
+                time(&tampon2);
+                pause += difftime(tampon2,tampon1);
         }
 
 
@@ -345,10 +372,23 @@ void jeu(int lvl){
         }
         Sleep(10);
         time(&Tactuel);
-        temps = 120-difftime(Tactuel, Tdebut);
+        temps = 120 - difftime(Tactuel, Tdebut) + pause;
         tics++;
                  ///attends l'entrée utilisateur
     }
+}
+
+
+void showscore(){
+    system("cls");
+    FILE *fscore = fopen("niveaux/scores.txt","r");
+    char ch;
+    while ((ch = fgetc(fscore)) != EOF) {
+        printf("%c",ch);
+    }
+    fclose(fscore);
+    printf("\nappuyez sur n'import quelle touche pour retourner au menu");
+    getch();
 }
 
 
@@ -381,11 +421,6 @@ int main() {
     system("cls");
 
 
-    FILE *ff = fopen("la.txt","w");
-    fputc(179,ff);
-    fclose(ff);
-
-
     menu();
 
     char input;
@@ -406,6 +441,10 @@ int main() {
                 break;
             case('m'):
                 code();
+                menu();
+                break;
+            case('s'):
+                showscore();
                 menu();
                 break;
 
