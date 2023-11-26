@@ -42,6 +42,15 @@ void import(char *lvlname, int *lignes, int *colonnes, char tableau[*lignes][*co
     char *niveau = lvlname;
     FILE *fp = fopen(niveau, "r");
 
+
+    /*
+     * initialise la lecture du fichier, les 5 premiers termes servent à savoir respectivement
+     * 1.le numéro du niveau
+     * 2.le nb de vies restantes
+     * 3 et 4. les coordonnées de départ de snoopy
+     * 4 et 5. le nombre actuel et total d'oiseaux
+     * 6. le temps restant
+     */
     char ch;
     *lvl = fgetc(fp) - 65;
     int lives = fgetc(fp)-65;
@@ -56,7 +65,7 @@ void import(char *lvlname, int *lignes, int *colonnes, char tableau[*lignes][*co
     *pause = nb - 120;
 
 
-    while ((ch = fgetc(fp)) != EOF) {
+    while ((ch = fgetc(fp)) != EOF) {    ///met dans le tableau chaque caractère du fichier
         if (ch!=10){
             tableau[j][i]=ch;
             i++;
@@ -71,7 +80,8 @@ void import(char *lvlname, int *lignes, int *colonnes, char tableau[*lignes][*co
 }
 
 
-void regles(){
+void regles()        ///affichage des règles
+{
     system("cls");
 
     FILE *f =fopen("niveaux/regles.txt","r");
@@ -85,7 +95,8 @@ void regles(){
 }
 
 
-void menu(){
+void menu()         ///affichage du menu
+{
     system("cls");
 
     FILE *fmenu = fopen("niveaux/menu.txt","r");
@@ -97,7 +108,8 @@ void menu(){
 }
 
 
-void lose(){
+void lose()         ///affichage du game over
+{
     system("cls");
     gotoligcol(0,0);
     FILE *perdu = fopen ("niveaux/gameover.txt", "r");
@@ -109,7 +121,8 @@ void lose(){
 }
 
 
-void renvoi_sp(int bloc, int snoopyXY[2], int move[2], int *lignes, int *colonnes, char tableau[*lignes][*colonnes], int oiseaux[2], int *vies){   ///exécute le script corresondant au bloc rencontré
+void renvoi_sp(int bloc, int snoopyXY[2], int move[2], int *lignes, int *colonnes, char tableau[*lignes][*colonnes], int oiseaux[2], int *vies) ///exécute le script corresondant au bloc rencontré
+{
     int sens[2] = {move[0]-snoopyXY[0], move[1]-snoopyXY[1]};
     switch (bloc){
         case 245:    ///oiseau
@@ -171,17 +184,22 @@ void renvoi_sp(int bloc, int snoopyXY[2], int move[2], int *lignes, int *colonne
 }
 
 
-void save(char *lvlname, int *lignes, int *colonnes, char tableau1[*lignes][*colonnes], int snoopyXY1[2], int oiseaux[2], int lvl, int vies, double temps){
+void save(char *lvlname, int *lignes, int *colonnes, char tableau1[*lignes][*colonnes], int snoopyXY1[2], int oiseaux[2], int lvl, int vies, double temps)   ///sauvegarde du fichier
+{
     FILE *fichier = fopen("niveaux/sauvegarde.txt", "w");
-    longueur(lvlname,&lignes, &colonnes);
+    longueur(lvlname,lignes, colonnes);
 
-    fputc(lvl+65,fichier);
-    fputc(vies+65,fichier);
-    fputc(snoopyXY1[0]+65,fichier);
+
+    ///lecture des premieres informations
+    fputc(lvl+65,fichier);              ///le niveau
+    fputc(vies+65,fichier);             ///le nb de vies
+    fputc(snoopyXY1[0]+65,fichier);     ///les coordonnées de snoopy
     fputc(snoopyXY1[1]+65,fichier);
-    fputc(oiseaux[0]+65,fichier);
+    fputc(oiseaux[0]+65,fichier);       ///les oiseaux restants
     fputc(oiseaux[1]+65,fichier);
-    fputc(temps+65, fichier);
+    fputc(temps+65, fichier);           ///le temps restant
+
+    ///recopie le tableau dans le fichier
     for (int i=0 ; i<*lignes ; i++){
         for (int j=0 ; j<*colonnes ; j++){
             fputc(tableau1[i][j],fichier);
@@ -193,7 +211,8 @@ void save(char *lvlname, int *lignes, int *colonnes, char tableau1[*lignes][*col
 }
 
 
-void ecrire_score(char* nom, int score) {
+void ecrire_score(char* nom, int score)     ///sous programme de sauvegarde du score
+{
     FILE* fichier = fopen("niveaux/scores.txt", "a");                    /// Ouvre le fichier en mode append
     if (fichier != NULL) {
         fprintf(fichier, "%s a eu un score de %d\n", nom, score); /// Écrit la ligne dans le fichier
@@ -204,13 +223,15 @@ void ecrire_score(char* nom, int score) {
 }
 
 
-void jeu(int lvl){
+void jeu(int lvl)       ///sous rogramme principal
+{
     system("cls");
 
-    char *ListeNiveaux[] = {"niveaux/sauvegarde.txt","niveaux/niveau1.txt", "niveaux/niveau2.txt", "niveaux/niveau3.txt", "niveaux/niveau10.txt"};
-    int nb_niveaux = sizeof(ListeNiveaux)/sizeof(ListeNiveaux[0]);
+    char *ListeNiveaux[] = {"niveaux/sauvegarde.txt","niveaux/niveau1.txt", "niveaux/niveau2.txt", "niveaux/niveau3.txt", "niveaux/niveau4.txt", "niveaux/niveau5.txt", "niveaux/niveau10.txt", 0};
+    int nb_niveaux = sizeof(ListeNiveaux)/sizeof(ListeNiveaux[0]) - 1;
     int lignes, colonnes;
     char *niveau = ListeNiveaux[lvl];
+    char *listeCodes[] = {"aaa","aab","acb","ddb","bbd","bba"};
 
     int destination;        ///code ascii du bloc rencontré
     ///liste des codes ascii des blocs
@@ -221,12 +242,12 @@ void jeu(int lvl){
     int snoopyXY[2]={1,1};      ///coordonnées de snoopy
     int move[2];                        ///coordonnées de snoopy après déplacement
     int oiseaux[2]={0,0};
-    int balleXY[2]={1,3};
-    int balleTraj[2]={1,1};
-    int tics=0;
+    int balleXY[2]={1,3};       ///coordonnes de base de la balle
+    int balleTraj[2]={1,1};     ///direction de la balle (à changer si elle rencontre un mur)
+    int tics=0;                         ///compteur d'entrées dans la boucle
     int vies = 3;
     double temps = 120;
-    double pause = 0;
+    double pause = 0;                   ///temps de la pause, qu'on soustrait au temps total pour éviter que le temps passe pendant la pause
     int score = 0;
     time_t Tdebut, Tactuel, tampon1, tampon2;
     time(&Tdebut);
@@ -241,22 +262,22 @@ void jeu(int lvl){
 
     char entree;                        ///touche d'entrée utilisateur
 
-    gotoligcol(12,3);
-    printf("q pour arreter\np pour pause\ns pour sauvegarder");
+    gotoligcol(20,0);
+    printf("code : %s\nq pour arreter\np pour pause\ns pour sauvegarder",listeCodes[lvl-1]);
 
-    while (entree != 'q'){
+    while (entree != 'q'){          ///si q est enfoncé, sort de la boucle
         gotoligcol(0,2);
-        printf("niveau %d sur %d,  %d oiseaux sur %d,  %d vies restantes\n  temps restant : %.0f     ",lvl, nb_niveaux, oiseaux[0], oiseaux[1], vies, temps);
+        printf("niveau %d sur %d,  %d oiseaux sur %d,  %d vies restantes\n  temps restant : %.0f     ",lvl-1, nb_niveaux-2, oiseaux[0], oiseaux[1], vies, temps);
 
         if (vies==0 || temps <= 0){
             lose();
             break;
         }
 
-        if (tics==5){
+        if (tics==10-lvl){       ///tous les n passages dans la boucle, la balle bouge
             tics=0;
             int nextBloc = tableau[balleXY[0]+balleTraj[0]][balleXY[1]+balleTraj[1]] + 256;
-            if (nextBloc == 205){
+            if (nextBloc == 205){   ///si un mur est rencontré, en fonction du mur, on change la trajectoire
                 balleTraj[0] *= -1;
             }
             if (nextBloc == 186){
@@ -274,7 +295,7 @@ void jeu(int lvl){
         }
 
 
-        if(oiseaux[0]==oiseaux[1]){
+        if(oiseaux[0]==oiseaux[1]){         ///si tous les oiseaux sont trouvés
             system("cls");
             printf("BRAVOOOOO, vous avez eu tous les oiseaux\n");
             lvl++;
@@ -297,7 +318,7 @@ void jeu(int lvl){
                 printf("appuyez sur n'importe quelle touche pour passer au niveau suivant...\n");
             }
 
-            if (lvl < nb_niveaux){
+            if (lvl < nb_niveaux){      ///s'il reste des niveaux, passe au niveau suivant en changeant de tableau
                 getch();
                 getch();
                 system("cls");
@@ -306,9 +327,10 @@ void jeu(int lvl){
                 move[0]=snoopyXY[0];
                 move[1]=snoopyXY[1];
             }
+            time(&Tdebut);
         }
 
-        switch(entree){                 ///vérifie si z,q,s ou d est entré par l'utilisateur
+        switch(entree){                 ///vérifie si une fleche ou un caractère est entré par l'utilisateur
             time_t tampon;
             case 72:
                 move[0]+=(-1);
@@ -366,7 +388,7 @@ void jeu(int lvl){
         }
 
         printf("\n");
-        if (_kbhit()) {
+        if (_kbhit()) {             ///si l'utilisateur a appuyé sur une touche, enrengistre cette touche, cela evite de stopper le programme avec getch()
             entree = getch();
         }
         else {
@@ -376,12 +398,12 @@ void jeu(int lvl){
         time(&Tactuel);
         temps = 120 - difftime(Tactuel, Tdebut) + pause;
         tics++;
-                 ///attends l'entrée utilisateur
     }
 }
 
 
-void showscore(){
+void showscore()        ///affichage du score
+{
     system("cls");
     FILE *fscore = fopen("niveaux/scores.txt","r");
     char ch;
@@ -394,25 +416,34 @@ void showscore(){
 }
 
 
-void code(){
+void code()     ///sous programme des codes
+{
     char entree[10];
     system("cls");
     printf("entrez le code :");
     scanf("%s",entree);
-    if (strcmp(entree,"aab")==0){
+    if (strcmp(entree,"aaa")==0){
         jeu(1);
         return;
     }
-    if (strcmp(entree,"acb")==0){
+    if (strcmp(entree,"aab")==0){
         jeu(2);
         return;
     }
-    if (strcmp(entree,"ddb")==0){
+    if (strcmp(entree,"acb")==0){
         jeu(3);
         return;
     }
-    if (strcmp(entree,"bba")==0){
+    if (strcmp(entree,"ddb")==0) {
         jeu(4);
+        return;
+    }
+    if (strcmp(entree,"bbd")==0){
+        jeu(5);
+        return;
+    }
+    if (strcmp(entree,"bba")==0){
+        jeu(6);
         return;
     }
     printf("\n\ncode invalide, appuyez sur une touche pour retourner au menu");
@@ -465,10 +496,6 @@ int main() {
 
         }
     }
-
-
-
-
     system("cls");
 
 

@@ -15,5 +15,7 @@ a toi de decouvrir leur fonctions!
 4. Tu dois finir en moins de
 2min chaque niveau.
 
+5. La balla accelere a chaque
+niveau, attention!
 
 -escape pour retourner au menu-
