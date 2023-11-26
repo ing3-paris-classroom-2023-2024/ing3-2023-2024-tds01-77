@@ -210,7 +210,7 @@ void jeu(int lvl){
     int balleTraj[2]={1,1};
     int tics=0;
     int vies = 3;
-    int temps = 1;
+    double temps = 1;
     time_t Tdebut, Tactuel;
     time(&Tdebut);
 
@@ -228,8 +228,8 @@ void jeu(int lvl){
     printf("q pour arreter");
 
     while (entree != 'q'){
-        gotoligcol(0,5);
-        printf("niveau %d sur %d,  %d oiseaux sur %d,  %d vies restantes\n  temps restant : %.1f",lvl, nb_niveaux, oiseaux[0], oiseaux[1], vies, temps);
+        gotoligcol(0,2);
+        printf("niveau %d sur %d,  %d oiseaux sur %d,  %d vies restantes\n  temps restant : %.0f",lvl, nb_niveaux, oiseaux[0], oiseaux[1], vies, temps);
 
         if (vies==0){
             lose();
@@ -280,6 +280,7 @@ void jeu(int lvl){
         }
 
         switch(entree){                 ///vérifie si z,q,s ou d est entré par l'utilisateur
+            time_t tampon;
             case 72:
                 move[0]+=(-1);
                 break;
@@ -295,7 +296,11 @@ void jeu(int lvl){
             case 's':
                 save(&lignes, &colonnes, tableau, snoopyXY, oiseaux, lvl, vies);
                 break;
-
+            case 'p':
+                tampon = Tactuel;
+                getch();
+                getch();
+                temps = tampon;
         }
 
 
@@ -315,7 +320,7 @@ void jeu(int lvl){
         }
 
 
-        gotoligcol(2,0);        ///imprime le tableau
+        gotoligcol(3,0);        ///imprime le tableau
         for (int i=0; i<lignes; i++){
             for (int j=0; j<colonnes; j++){
                 if (i==snoopyXY[0] && j==snoopyXY[1]){      ///aux coordonnées de snoopy, imprime snoopy
@@ -340,7 +345,7 @@ void jeu(int lvl){
         }
         Sleep(10);
         time(&Tactuel);
-        temps = difftime(Tactuel, Tdebut);
+        temps = 120-difftime(Tactuel, Tdebut);
         tics++;
                  ///attends l'entrée utilisateur
     }
