@@ -1,6 +1,6 @@
 CMakeFiles/ing3_2023_2024_tds01_77.dir/principal/source.c.obj: \
- C:\Users\tomde\CLionProjects\snoopy\principal\source.c \
- C:\Users\tomde\CLionProjects\snoopy\principal\header.h \
+ C:\Users\narha\CLionProjects\ing3-2023-2024-tds01-77\principal\source.c \
+ C:\Users\narha\CLionProjects\ing3-2023-2024-tds01-77\principal\header.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/x86_64-w64-mingw32/include/stdio.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/x86_64-w64-mingw32/include/corecrt_stdio_config.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/x86_64-w64-mingw32/include/corecrt.h \

@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/tomde/CLionProjects/snoopy
+# Install script for directory: C:/Users/narha/CLionProjects/ing3-2023-2024-tds01-77
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/tomde/CLionProjects/snoopy/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/narha/CLionProjects/ing3-2023-2024-tds01-77/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
