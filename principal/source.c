@@ -37,7 +37,8 @@ void import(char *lvlname, int *lignes, int *colonnes, char tableau[*lignes][*co
     i=0;
     j=0;
     longueur(lvlname, lignes, colonnes);
-
+    int l = *lignes;
+    int c = *colonnes;
     char *niveau = lvlname;
     FILE *fp = fopen(niveau, "r");
 
@@ -170,8 +171,9 @@ void renvoi_sp(int bloc, int snoopyXY[2], int move[2], int *lignes, int *colonne
 }
 
 
-void save(int *lignes, int *colonnes, char tableau1[*lignes][*colonnes], int snoopyXY1[2], int oiseaux[2], int lvl, int vies, double temps){
+void save(char *lvlname, int *lignes, int *colonnes, char tableau1[*lignes][*colonnes], int snoopyXY1[2], int oiseaux[2], int lvl, int vies, double temps){
     FILE *fichier = fopen("niveaux/sauvegarde.txt", "w");
+    longueur(lvlname,&lignes, &colonnes);
 
     fputc(lvl+65,fichier);
     fputc(vies+65,fichier);
@@ -205,7 +207,7 @@ void ecrire_score(char* nom, int score) {
 void jeu(int lvl){
     system("cls");
 
-    char *ListeNiveaux[] = {"niveaux/sauvegarde.txt","niveaux/niveau1.txt", "niveaux/niveau3.txt", "niveaux/niveautest.txt"};
+    char *ListeNiveaux[] = {"niveaux/sauvegarde.txt","niveaux/niveau1.txt", "niveaux/niveau2.txt", "niveaux/niveau3.txt", "niveaux/niveau10.txt"};
     int nb_niveaux = sizeof(ListeNiveaux)/sizeof(ListeNiveaux[0]);
     int lignes, colonnes;
     char *niveau = ListeNiveaux[lvl];
@@ -292,7 +294,7 @@ void jeu(int lvl){
                 return;
             }
             else {
-                printf("appuyez sur n'importe quelle touche pour passer au niveau suivantq\n");
+                printf("appuyez sur n'importe quelle touche pour passer au niveau suivant...\n");
             }
 
             if (lvl < nb_niveaux){
@@ -321,7 +323,7 @@ void jeu(int lvl){
                 move[1]+=1;
                 break;
             case 's':
-                save(&lignes, &colonnes, tableau, snoopyXY, oiseaux, lvl, vies, temps);
+                save(niveau, &lignes, &colonnes, tableau, snoopyXY, oiseaux, lvl, vies, temps);
                 break;
             case 'p':
                 time(&tampon1);
@@ -399,6 +401,19 @@ void code(){
     scanf("%s",entree);
     if (strcmp(entree,"aab")==0){
         jeu(1);
+        return;
+    }
+    if (strcmp(entree,"acb")==0){
+        jeu(2);
+        return;
+    }
+    if (strcmp(entree,"ddb")==0){
+        jeu(3);
+        return;
+    }
+    if (strcmp(entree,"bba")==0){
+        jeu(4);
+        return;
     }
     printf("\n\ncode invalide, appuyez sur une touche pour retourner au menu");
     getch();
