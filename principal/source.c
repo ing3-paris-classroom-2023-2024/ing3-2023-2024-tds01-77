@@ -116,6 +116,14 @@ void renvoi_sp(int bloc, int snoopyXY[2], int move[2], int *lignes, int *colonne
                 }
             }
             break;
+
+        case 164:    ///bloc surprise nouveau niveau
+            printf("Congratulations trap deactivated!!");
+            printf("To claim, enter 10")
+                    }
+                }
+            }
+            break;
     }
 }
 
