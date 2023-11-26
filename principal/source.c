@@ -1,4 +1,8 @@
 #include "header.h"
+///sites consultés:https://learn.microsoft.com ; https://koor.fr/C/cstdbool/cstdbool.wp
+///Cours: ALGORITHMIQUE ET PROGRAMMATION EN LANGAGE C ~ Cours – Exercices – Mini projets 2022-2023 ING3 Nouveaux Frédéric Ravaut Enseignant – Chercheur
+
+
 
 void gotoligcol( int lig, int col )   ///sous prog pour placer le curseur où on veut
 {
