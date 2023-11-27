@@ -1,16 +1,21 @@
 --------------Regles--------------
-deplacements avec zqsd
+deplacements avec les flËches
 
 1. But du jeu :
 Tu es Snoopy (©) et tu dois
 attraper tous les oiseaux (ı)
 
-2.attention a la balle!(œè)
+2.attention a la balle!(œ)
 elle se deplace et il faut
 l'esquiver
 
 3.Il y a differents blocs,
 a toi de decouvrir leur fonctions!
 
+4. Tu dois finir en moins de
+2min chaque niveau.
+
+5. La balla accelere a chaque
+niveau, attention!
 
 -escape pour retourner au menu-
