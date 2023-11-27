@@ -1,21 +1,22 @@
-169  ©  snoopy
-207  Ï  balle
-245  õ  oiseau
+169  Â©  snoopy
+207  Ã  balle
+245  Ãµ  oiseau
 124  |  bloc deplacable
-196  Ä  bloc deplacable
-219  Û  bloc
-254  ş  bloc poussable
-178  ²  bloc piege
-174  ®  bloc tp in
-175  ¯  bloc tp out
-185  ¹  ?
-186  º  doite/gauche
-187  »  coin haut droit
-188  ¼  coin bas droit
-200  È  coin bas gauche
-201  É  coin haut gauche
-202  Ê  ?
-203  Ë  ?
-204  Ì  ?
-205  Í  haut/bas
-206  Î  ?
+196  Ã„  bloc deplacable
+219  Ã›  bloc
+254  Ã¾  bloc poussable
+178  Â²  bloc piege
+174  Â®  bloc tp in
+175  Â¯  bloc tp out
+185  Â¹  ?
+186  Âº  doite/gauche
+187  Â»  coin haut droit
+188  Â¼  coin bas droit
+200  Ãˆ  coin bas gauche
+201  Ã‰  coin haut gauche
+202  ÃŠ  ?
+203  Ã‹  ?
+204  ÃŒ  ?
+205  Ã  haut/bas
+206  Ã  ?
+164  Â¤  bloc surprise1
